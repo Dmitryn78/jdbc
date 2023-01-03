@@ -11,7 +11,9 @@ public class UserDaoJDBCImpl implements UserDao {
     public UserDaoJDBCImpl() {
 
     }
-    Connection connection = Util.getConnection();
+
+    private Connection connection = Util.getConnection();
+
     public void createUsersTable() {
         try {
             Statement statement = connection.createStatement();
@@ -44,10 +46,10 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
+        PreparedStatement preparedStatement = null;
         try {
-           // Statement statement = connection.createStatement();
-            PreparedStatement preparedStatement = connection.prepareStatement("delete from User where id = " + id);
-            //statement.executeUpdate("delete from User where id = " + id);
+            preparedStatement = connection.prepareStatement("delete from User where id = ? ");
+            preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
